@@ -1,107 +1,83 @@
-﻿using System;
+using System;
 using System.Configuration;
 using System.Data.SqlClient;
 
-namespace A2_B1
+namespace B2
 {
     public partial class _Default : System.Web.UI.Page
     {
         string cs = ConfigurationManager
-                    .ConnectionStrings["GradeDB"]
-                    .ConnectionString;
+            .ConnectionStrings["BankDB"]
+            .ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                LoadGradeCounts();
+                lblBalance.Text = "0";
             }
         }
 
-        protected void btnSubmit_Click(object sender, EventArgs e)
+        protected void btnDeposit_Click(object sender, EventArgs e)
         {
-            int number = Convert.ToInt32(txtNumber.Text);
+            decimal amount =
+                Convert.ToDecimal(txtAmount.Text);
 
-            if (number < 0 || number > 100)
+            decimal balance =
+                Convert.ToDecimal(Session["Balance"] ?? 0);
+
+            BankAccount account =
+                new BankAccount(
+                    txtAccountNumber.Text,
+                    balance);
+
+            if (account.Deposit(amount))
             {
-                lblGrade.Text = "Invalid Number";
-                return;
+                Session["Balance"] =
+                    account.ShowBalance();
+
+                lblBalance.Text =
+                    account.ShowBalance().ToString();
+
+                lblStatus.Text =
+                    "Deposit Successful";
             }
-
-            GradingSystem gs =
-                new GradingSystem(txtStudentID.Text, number);
-
-            string grade = gs.SetGrade();
-
-            lblGrade.Text = grade;
-
-            using (SqlConnection con =
-                new SqlConnection(cs))
+            else
             {
-                string query =
-                @"INSERT INTO Students
-                (StudentID, Number, Grade)
-                VALUES
-                (@StudentID, @Number, @Grade)";
-
-                SqlCommand cmd =
-                    new SqlCommand(query, con);
-
-                cmd.Parameters.AddWithValue(
-                    "@StudentID",
-                    txtStudentID.Text);
-
-                cmd.Parameters.AddWithValue(
-                    "@Number",
-                    number);
-
-                cmd.Parameters.AddWithValue(
-                    "@Grade",
-                    grade);
-
-                con.Open();
-                cmd.ExecuteNonQuery();
-            }
-
-            LoadGradeCounts();
-        }
-
-        private void LoadGradeCounts()
-        {
-            using (SqlConnection con =
-                new SqlConnection(cs))
-            {
-                con.Open();
-
-                lblAPlus.Text =
-                    GetCount(con, "A+").ToString();
-
-                lblBPlus.Text =
-                    GetCount(con, "B+").ToString();
-
-                lblCPlus.Text =
-                    GetCount(con, "C+").ToString();
-
-                lblF.Text =
-                    GetCount(con, "F").ToString();
+                lblStatus.Text =
+                    "Deposit limit is 1000";
             }
         }
 
-        private int GetCount(
-            SqlConnection con,
-            string grade)
+        protected void btnWithdraw_Click(object sender, EventArgs e)
         {
-            string query =
-                "SELECT COUNT(*) FROM Students WHERE Grade=@Grade";
+            decimal amount =
+                Convert.ToDecimal(txtAmount.Text);
 
-            SqlCommand cmd =
-                new SqlCommand(query, con);
+            decimal balance =
+                Convert.ToDecimal(Session["Balance"] ?? 0);
 
-            cmd.Parameters.AddWithValue(
-                "@Grade",
-                grade);
+            BankAccount account =
+                new BankAccount(
+                    txtAccountNumber.Text,
+                    balance);
 
-            return (int)cmd.ExecuteScalar();
+            if (account.Withdraw(amount))
+            {
+                Session["Balance"] =
+                    account.ShowBalance();
+
+                lblBalance.Text =
+                    account.ShowBalance().ToString();
+
+                lblStatus.Text =
+                    "Withdraw Successful";
+            }
+            else
+            {
+                lblStatus.Text =
+                    "Insufficient Balance";
+            }
         }
     }
 }
