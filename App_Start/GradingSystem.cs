@@ -1,28 +1,42 @@
-﻿using System;
+using System;
 
-public class GradingSystem
+namespace B2
 {
-    public string StudentID { get; set; }
-    public int Number { get; set; }
-
-    public GradingSystem(string studentID, int number)
+    public class BankAccount
     {
-        StudentID = studentID;
-        Number = number;
-    }
+        public string AccountNumber { get; set; }
+        public decimal Balance { get; set; }
 
-    public string SetGrade()
-    {
-        if (Number >= 80 && Number <= 100)
-            return "A+";
+        public BankAccount(string accountNumber, decimal balance)
+        {
+            AccountNumber = accountNumber;
+            Balance = balance;
+        }
 
-        else if (Number >= 60)
-            return "B+";
+        public bool Deposit(decimal amount)
+        {
+            if (amount <= 0 || amount > 1000)
+                return false;
 
-        else if (Number >= 40)
-            return "C+";
+            Balance += amount;
+            return true;
+        }
 
-        else
-            return "F";
+        public bool Withdraw(decimal amount)
+        {
+            if (amount <= 0)
+                return false;
+
+            if (amount > Balance)
+                return false;
+
+            Balance -= amount;
+            return true;
+        }
+
+        public decimal ShowBalance()
+        {
+            return Balance;
+        }
     }
 }
