@@ -7,3 +7,16 @@
         <p>Use this area to provide additional information.</p>
     </main>
 </asp:Content>
+
+#CREATE DATABASE BankDB;
+GO
+
+USE BankDB;
+GO
+
+CREATE TABLE Accounts
+(
+    AccountNumber VARCHAR(20) PRIMARY KEY,
+    Balance DECIMAL(10,2)
+);
+#
