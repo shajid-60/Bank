@@ -1,65 +1,53 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="A2_B1._Default" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="B2._Default" %>
 
 <!DOCTYPE html>
 
 <html>
 <head runat="server">
-    <title>Grade Management System</title>
+    <title>Bank System</title>
 </head>
 <body>
-
 <form id="form1" runat="server">
 
-    <h2>Grade Management System</h2>
+    <h2>Bank Account System</h2>
 
-    Student ID:
-    <asp:TextBox ID="txtStudentID" runat="server"></asp:TextBox>
+    Account Number:
+    <asp:TextBox ID="txtAccountNumber" runat="server"></asp:TextBox>
 
     <br /><br />
 
-    Number:
-    <asp:TextBox ID="txtNumber"
+    Amount:
+    <asp:TextBox ID="txtAmount"
         runat="server"
         TextMode="Number">
     </asp:TextBox>
 
     <br /><br />
 
-    <asp:Button ID="btnSubmit"
+    <asp:Button ID="btnDeposit"
         runat="server"
-        Text="Submit"
-        OnClick="btnSubmit_Click" />
+        Text="Deposit"
+        OnClick="btnDeposit_Click" />
+
+    <asp:Button ID="btnWithdraw"
+        runat="server"
+        Text="Withdraw"
+        OnClick="btnWithdraw_Click" />
 
     <br /><br />
 
-    Grade:
-    <asp:Label ID="lblGrade"
+    Current Balance:
+    <asp:Label ID="lblBalance"
         runat="server">
     </asp:Label>
 
     <br /><br />
 
-    <h3>Total Students By Grade</h3>
-
-    A+ :
-    <asp:Label ID="lblAPlus" runat="server"></asp:Label>
-
-    <br />
-
-    B+ :
-    <asp:Label ID="lblBPlus" runat="server"></asp:Label>
-
-    <br />
-
-    C+ :
-    <asp:Label ID="lblCPlus" runat="server"></asp:Label>
-
-    <br />
-
-    F :
-    <asp:Label ID="lblF" runat="server"></asp:Label>
+    Status:
+    <asp:Label ID="lblStatus"
+        runat="server">
+    </asp:Label>
 
 </form>
-
 </body>
 </html>
